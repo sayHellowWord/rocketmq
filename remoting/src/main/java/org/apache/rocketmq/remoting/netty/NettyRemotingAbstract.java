@@ -552,7 +552,9 @@ public abstract class NettyRemotingAbstract {
                 }, once);
             responseFutureReference.set(responseFuture);
             this.responseTable.put(opaque, responseFuture);
+
             try {
+                //发送请求
                 channel.writeAndFlush(request).addListener((ChannelFutureListener) f -> {
                     if (f.isSuccess()) {
                         responseFuture.setSendRequestOK(true);

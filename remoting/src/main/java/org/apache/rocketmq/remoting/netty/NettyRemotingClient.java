@@ -536,10 +536,24 @@ public class NettyRemotingClient extends NettyRemotingAbstract implements Remoti
         }
     }
 
+    /**
+     * 同步调用方法
+     * @param addr
+     * @param request
+     * @param timeoutMillis
+     * @return
+     * @throws InterruptedException
+     * @throws RemotingConnectException
+     * @throws RemotingSendRequestException
+     * @throws RemotingTimeoutException
+     */
     @Override
     public RemotingCommand invokeSync(String addr, final RemotingCommand request, long timeoutMillis)
         throws InterruptedException, RemotingConnectException, RemotingSendRequestException, RemotingTimeoutException {
+
         long beginStartTime = System.currentTimeMillis();
+
+        //获取Netty链接
         final Channel channel = this.getAndCreateChannel(addr);
         String channelRemoteAddr = RemotingHelper.parseChannelRemoteAddr(channel);
         if (channel != null && channel.isActive()) {
@@ -678,6 +692,12 @@ public class NettyRemotingClient extends NettyRemotingAbstract implements Remoti
         return null;
     }
 
+    /**
+     * 双重检查锁
+     * @param addr
+     * @return
+     * @throws InterruptedException
+     */
     private ChannelFuture createChannelAsync(final String addr) throws InterruptedException {
         ChannelWrapper cw = this.channelTables.get(addr);
         if (cw != null && cw.isOK()) {

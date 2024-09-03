@@ -583,8 +583,16 @@ public class MQClientAPIImpl implements NameServerUpdateCallback {
         final SendMessageContext context,
         final DefaultMQProducerImpl producer
     ) throws RemotingException, MQBrokerException, InterruptedException {
+
         long beginStartTime = System.currentTimeMillis();
         RemotingCommand request = null;
+        /**
+         * 消息类型
+         *  普通
+         *  顺序
+         *  定时/延时消息
+         *  事务消息
+         */
         String msgType = msg.getProperty(MessageConst.PROPERTY_MESSAGE_TYPE);
         boolean isReply = msgType != null && msgType.equals(MixAll.REPLY_MESSAGE_FLAG);
         if (isReply) {
